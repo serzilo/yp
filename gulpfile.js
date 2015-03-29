@@ -8,6 +8,7 @@ var gulp = require('gulp'),
 	cssmin = require('gulp-minify-css'),
 	uglify = require('gulp-uglify'),
 	browserSync = require("browser-sync"),
+	spritesmith = require('gulp.spritesmith'),
     reload = browserSync.reload;
 
 
@@ -19,10 +20,10 @@ var path = {
         img:  'build/img/'
     },
     src: {
-        html:  'src/html/*.html',
-        js:    'src/js/main.js',
-        css:   'src/css/main.styl',
-        img:   'src/img/**/*.*'
+        html:   'src/html/*.html',
+        js:     'src/js/main.js',
+        css:    'src/css/main.styl',
+        img:    'src/img/**/*.*'
     },
     watch: {
         html:  'src/html/*.html',
@@ -67,18 +68,21 @@ gulp.task('js:build', function () {
         .pipe(reload({stream: true}));
 });
 
-// todo
-gulp.task('image:build', function () {
-    gulp.src(path.src.img)
-
-        .pipe(reload({stream: true}));
+gulp.task('sprite:build', function () {
+	var spriteData = gulp.src(path.src.img).pipe(spritesmith({
+		imgName: 'sprite.png',
+		cssName: 'sprite.css',
+		imgPath: '../img/sprite.png'
+	}));
+	spriteData.img.pipe(gulp.dest(path.build.img));
+	spriteData.css.pipe(cssmin()).pipe(gulp.dest(path.build.css));
 });
 
 gulp.task('build', [
     'html:build',
+    'sprite:build',
     'css:build',
-    'js:build',
-    'image:build'
+    'js:build'
 ]);
 
 gulp.task('watch', function(){
@@ -88,12 +92,13 @@ gulp.task('watch', function(){
     watch([path.watch.css], function(event, cb) {
         gulp.start('css:build');
     });
+    watch([path.watch.img], function(event, cb) {
+        gulp.start('sprite:build');
+    });
     watch([path.watch.js], function(event, cb) {
         gulp.start('js:build');
     });
-    watch([path.watch.img], function(event, cb) {
-        gulp.start('image:build');
-    });
+    
 });
 
 gulp.task('webserver', function () {

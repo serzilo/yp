@@ -1,6 +1,124 @@
+// variables
+$toolbar-height = 30px;
+$pres-max-width = 700px;
+$pres-height = 400px;
+
+// mixins
+background-gradient(startColor, endColor){
+	background: startColor;
+	background: linear-gradient(top, startColor, endColor);
+}
+
+absolute-element(top, right, bottom, left){
+	position: absolute;
+	top: top;
+	right: right;
+	bottom: bottom;
+	left: left;
+}
+
+absolute-top-bottom(top, bottom){
+	position: absolute;
+	top: top;
+	bottom: bottom;
+}
+
+no-selection(){
+	user-select: none;
+}
+
+border-radius(){
+	border-radius arguments;
+}
+
+transitions(){
+	if arguments {
+		transition: arguments;
+	} else {
+		transition: all 0.5s ease;
+	}
+}
+
+
+//
+
+
+
 body {
 	color: #323232;
 	margin:  0;
 	padding: 0;
 	font-size: 100%;
+	background: #dde4ea;
+}
+
+.pres{
+	position: relative;
+	margin: 30px auto;
+	border: 1px solid #c0c6d2;
+	background: #323232;
+	max-width: $pres-max-width
+	height: $pres-height
+	no-selection()
+
+	&__wrap-slide{
+		absolute-element(0, 0, $toolbar-height, 0)
+	}
+
+	&__slide{
+		absolute-element(0, 0, 0, 0)
+		margin: auto;
+		max-height: 100%;
+		max-width: 100%;
+		display: block; 
+	}
+
+	&__toolbar{
+		absolute-element(auto, 0, 0, 0)
+		background-gradient(#fff, #eff3f6);
+		height: $toolbar-height;
+	}
+
+	&__nav{
+		absolute-top-bottom(0, $toolbar-height)
+		width: 25%;
+		cursor: pointer;
+
+		&_prev,
+		&_prev &-btn{
+			left: 0;
+		}
+
+		&_prev &-btn{
+			border-radius(0 3px 3px 0)
+		}
+
+		&_next,
+		&_next &-btn{
+			right: 0;
+		}
+
+		&_next &-btn{
+			border-radius(3px 0 0 3px)
+		}
+
+		&_disabled{
+			display: none;
+		}
+
+		&-btn{
+			absolute-top-bottom(50%, auto)
+			width: 50px;
+			height: 100px
+			margin-top: -50px;
+			background: #000;
+			background: rgba(0, 0, 0, 0.5);
+			opacity: 0;
+			transitions(opacity 0.4s ease-out)
+		}
+
+		&:hover &-btn{
+			opacity: 1;
+		}
+	}
 }
