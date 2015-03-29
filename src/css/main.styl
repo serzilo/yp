@@ -2,6 +2,7 @@
 $toolbar-height = 30px;
 $pres-max-width = 700px;
 $pres-height = 400px;
+$standart-border-color = #c0c6d2;
 
 // mixins
 background-gradient(startColor, endColor){
@@ -49,13 +50,14 @@ body {
 	margin:  0;
 	padding: 0;
 	font-size: 100%;
+	font-family: Helvetica, tahoma, verdana, arial, sans-serif;
 	background: #dde4ea;
 }
 
 .pres{
 	position: relative;
 	margin: 30px auto;
-	border: 1px solid #c0c6d2;
+	border: 1px solid $standart-border-color;
 	background: #323232;
 	max-width: $pres-max-width
 	height: $pres-height
@@ -77,12 +79,20 @@ body {
 		absolute-element(auto, 0, 0, 0)
 		background-gradient(#fff, #eff3f6);
 		height: $toolbar-height;
+		border-top: 1px solid $standart-border-color;
 	}
 
 	&__nav{
 		absolute-top-bottom(0, $toolbar-height)
 		width: 25%;
 		cursor: pointer;
+		display: block;
+		text-decoration: none;
+
+		&:active .icon-prev,
+		&:active .icon-next,{
+			margin-top: -9px;
+		}
 
 		&_prev,
 		&_prev &-btn{
@@ -115,10 +125,55 @@ body {
 			background: rgba(0, 0, 0, 0.5);
 			opacity: 0;
 			transitions(opacity 0.4s ease-out)
+
+			& > .icon-next,
+			& > .icon-prev{
+				position: absolute;
+				top: 50%;
+				margin-top: -10px; 
+			}
+
+			& > .icon-prev{
+				left: 12px;
+			}
+
+			& > .icon-next{
+				right: 12px;
+			}
 		}
 
 		&:hover &-btn{
 			opacity: 1;
 		}
 	}
+}
+
+.pagination{
+	&__list{
+		list-style: none;
+		margin: 2px 0 0 0;
+		padding: 0;
+		text-align: center;
+	}
+
+	&__item{
+		display: inline-block;
+		cursor: pointer;
+		padding: 3px;
+		opacity: 0.7;
+		vertical-align: top;
+
+		&:hover{
+			opacity: 1;
+		}
+
+		&_disabled{
+			cursor: default;
+			opacity: 0.3 !important;
+		}
+	}
+}
+
+.search-page{
+	absolute-element(2px, 2px, auto, auto)
 }
