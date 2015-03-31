@@ -7,56 +7,60 @@
 	    <link rel="stylesheet" href="css/sprite.css" />
 	</head>
 	<body>
-		
-		<div class="pres">
-			<div class="pres__wrap-slide">
-				<img src="slides/1/1.jpg" alt="" class="pres__slide" />
-			</div>
 
-			<div class="toolbar">
-				<div class="toolbar__pagination">
-					<a href="#" class="btn-link" title="В начало">
-						<div class="icon-backward"></div>
-					</a>
-					<a href="#" class="btn-link" title="Назад">
-						<div class="icon-go-prev"></div>
-					</a>
-					<a href="#" class="btn-link" title="Вперёд">
-						<div class="icon-go-next"></div>
-					</a>
-					<a href="#" class="btn-link" title="В конец">
-						<div class="icon-forward"></div>
-					</a>
-				</div>
+		<div id="presentation1"></div>
+		<div id="presentation2"></div>
+		<div id="presentation3"></div>
 
-				<div class="toolbar__search-page">
-					<input type="text" value="1" class="input-text input-text_num m" /> 
-					<span class="toolbar__length m">/ 17</span>
-					<button class="button m">GO</button>
-				</div>
-				
-				<div class="toolbar__fullscreen">
-					<a href="#" class="btn-link" title="На весь экран">
-						<div class="icon-fullscreen"></div>
-					</a>
-				</div>
-
-			</div>
-
-			<a href="#" class="pres__nav pres__nav_prev">
-				<div class="pres__nav-btn">
-					<div class="icon-prev"></div>
-				</div>
-			</a>
-
-			<a href="#" class="pres__nav pres__nav_next">
-				<div class="pres__nav-btn">
-					<div class="icon-next"></div>
-				</div>
-			</a>
-		</div>
+	    <script type="text/tmpl" id="presentation-main">
+	    	<div class="pres">
+	    		<div class="pres__wrap-slide">
+	    			<img src="{{ slide }}" alt="" class="pres__slide js-pres__slide" />
+	    		</div>
 	    
-	    234
+	    		<a href="#" class="pres__nav {if previousDisabled}pres__nav_disabled{/if} pres__nav_prev js-request-slide" data-direction="-1">
+	    			<div class="pres__nav-btn">
+	    				<div class="icon-prev"></div>
+	    			</div>
+	    		</a>
+	    
+	    		<a href="#" class="pres__nav pres__nav_next js-request-slide" data-direction="1">
+	    			<div class="pres__nav-btn">
+	    				<div class="icon-next"></div>
+	    			</div>
+	    		</a>
+	    
+	    		<div class="toolbar">
+	    			<div class="toolbar__pagination">
+	    				<a href="#" class="btn-link js-request-slide" data-direction="start" title="В начало">
+	    					<div class="icon-backward"></div>
+	    				</a>
+	    				<a href="#" class="btn-link js-request-slide" data-direction="-1" title="Назад">
+	    					<div class="icon-go-prev"></div>
+	    				</a>
+	    				<a href="#" class="btn-link js-request-slide" data-direction="1" title="Вперёд">
+	    					<div class="icon-go-next"></div>
+	    				</a>
+	    				<a href="#" class="btn-link js-request-slide" data-direction="finish" title="В конец">
+	    					<div class="icon-forward"></div>
+	    				</a>
+	    			</div>
+	    
+	    			<div class="toolbar__search-page">
+	    				<input type="text" value="1" class="input-text input-text_num m js-input-text_num" /> 
+	    				<span class="toolbar__length m js-toolbar__length">/ {{ slidesLength }}</span>
+	    				<button class="button m js-toolbar__btn">GO</button>
+	    			</div>
+	    			
+	    			<div class="toolbar__fullscreen">
+	    				<a href="#" class="btn-link js-btn-link_fullscreen" title="На весь экран">
+	    					<div class="icon-fullscreen"></div>
+	    				</a>
+	    			</div>
+	    
+	    		</div>
+	    	</div>
+	    </script>
 
 	     <script src="js/main.js"></script>
 	</body>
