@@ -26,11 +26,37 @@
 			var self = this;
 
 			// кнопки вперёд-назад
-			this.element.on('click', '.js-request-slide', function(e){
+			self.element.on('click', '.js-request-slide', function(e){
 				e.preventDefault();
 				e.stopPropagation();
 
 				self._requestSlide($(this).data('direction'));
+			});
+
+			self.element.on('click', '.js-toolbar__search-page-btn', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				self._searchSlide();
+			});
+
+			self.element.on('keydown', '.js-input-text_num', function(e){
+				var allowedKey = self._validateKeys(e);
+
+				if (allowedKey.allow === false){
+					e.preventDefault();
+					e.stopPropagation();
+				} else {
+					if (allowedKey.type == 'enter'){
+						self._searchSlide();
+					}
+				}
+			}).on('blur', '.js-input-text_num', function(e){
+				var $this = $(this);
+
+				if ($this.val() == ''){
+					$this.val(self.current+1);
+				}
 			});
 		},
 		_requestSlide: function(direction){
@@ -49,16 +75,70 @@
 
 			if (changeSlide === true){
 				this._setSlide();
-				this._setControlsStatuses();
+				this._setControlsStatements();
 			}
 		},
 		_setSlide: function(){
 			this.element.find('.js-pres__slide').attr({'src': this.slidesDir + this.slides[this.current]});
 		},
-		_setControlsStatuses: function(){
-			// поле для ввода номера страницы
-			this.element.find('.js-input-text_num').val(this.current+1);
+		_setControlsStatements: function(){
+			var btnSlidePrev   = this.element.find('.js-request-slide_prev'),
+				btnSlideNext   = this.element.find('.js-request-slide_next'),
+				presNavPrev    = this.element.find('.js-pres__nav_prev'),
+				presNavNext    = this.element.find('.js-pres__nav_next');
 
+			// поле для ввода номера страницы
+			this.element.find('.js-input-text_num').val(this.current + 1);
+
+			// проверка, можно ли листать вперед
+			if (this.slides[this.current + 1]){
+				btnSlideNext.removeClass('btn-link_disabled');
+				presNavNext.removeClass('pres__nav_disabled');
+			} else {
+				btnSlideNext.addClass('btn-link_disabled');
+				presNavNext.addClass('pres__nav_disabled');
+			}
+
+			// проверка, можно ли листать назад
+			if (this.slides[this.current - 1]){
+				btnSlidePrev.removeClass('btn-link_disabled');
+				presNavPrev.removeClass('pres__nav_disabled');
+			} else {
+				btnSlidePrev.addClass('btn-link_disabled');
+				presNavPrev.addClass('pres__nav_disabled');
+			}
+		},
+		_searchSlide: function(){
+			var self = this,
+				slideNumInputVal = self.element.find('.js-input-text_num').val() - 1;
+
+			if (self.slides[slideNumInputVal] && slideNumInputVal != self.current){
+				self.current = slideNumInputVal;
+
+				self._setSlide();
+				self._setControlsStatements();
+			}
+		},
+		_validateKeys: function(e) {
+			var keyCode = e.keyCode,
+				obj = {};
+
+			obj.allow = false;
+
+			console.log(keyCode);
+
+			// цифры (48-57)
+			// стереть - 8
+			// enter - 13
+			if ((keyCode >= 48 && keyCode <= 57) || keyCode == 8 || keyCode == 13){
+				obj.allow = true;
+
+				if (keyCode == 13){
+					obj.type = 'enter';
+				}
+			} 
+
+			return obj;
 		}
 	});
 

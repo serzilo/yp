@@ -18,13 +18,13 @@
 	    			<img src="{{ slide }}" alt="" class="pres__slide js-pres__slide" />
 	    		</div>
 	    
-	    		<a href="#" class="pres__nav {if previousDisabled}pres__nav_disabled{/if} pres__nav_prev js-request-slide" data-direction="-1">
+	    		<a href="#" class="pres__nav {if previousDisabled}pres__nav_disabled{/if} pres__nav_prev js-request-slide js-pres__nav_prev" data-direction="-1">
 	    			<div class="pres__nav-btn">
 	    				<div class="icon-prev"></div>
 	    			</div>
 	    		</a>
 	    
-	    		<a href="#" class="pres__nav pres__nav_next js-request-slide" data-direction="1">
+	    		<a href="#" class="pres__nav pres__nav_next js-request-slide js-pres__nav_next" data-direction="1">
 	    			<div class="pres__nav-btn">
 	    				<div class="icon-next"></div>
 	    			</div>
@@ -32,16 +32,16 @@
 	    
 	    		<div class="toolbar">
 	    			<div class="toolbar__pagination">
-	    				<a href="#" class="btn-link js-request-slide" data-direction="start" title="В начало">
+	    				<a href="#" class="btn-link js-request-slide js-request-slide_prev" data-direction="start" title="В начало">
 	    					<div class="icon-backward"></div>
 	    				</a>
-	    				<a href="#" class="btn-link js-request-slide" data-direction="-1" title="Назад">
+	    				<a href="#" class="btn-link js-request-slide js-request-slide_prev" data-direction="-1" title="Назад">
 	    					<div class="icon-go-prev"></div>
 	    				</a>
-	    				<a href="#" class="btn-link js-request-slide" data-direction="1" title="Вперёд">
+	    				<a href="#" class="btn-link js-request-slide js-request-slide_next" data-direction="1" title="Вперёд">
 	    					<div class="icon-go-next"></div>
 	    				</a>
-	    				<a href="#" class="btn-link js-request-slide" data-direction="finish" title="В конец">
+	    				<a href="#" class="btn-link js-request-slide js-request-slide_next" data-direction="finish" title="В конец">
 	    					<div class="icon-forward"></div>
 	    				</a>
 	    			</div>
@@ -49,7 +49,7 @@
 	    			<div class="toolbar__search-page">
 	    				<input type="text" value="1" class="input-text input-text_num m js-input-text_num" /> 
 	    				<span class="toolbar__length m js-toolbar__length">/ {{ slidesLength }}</span>
-	    				<button class="button m js-toolbar__btn">GO</button>
+	    				<button class="button m js-toolbar__search-page-btn">GO</button>
 	    			</div>
 	    			
 	    			<div class="toolbar__fullscreen">
@@ -57,7 +57,6 @@
 	    					<div class="icon-fullscreen"></div>
 	    				</a>
 	    			</div>
-	    
 	    		</div>
 	    	</div>
 	    </script>
