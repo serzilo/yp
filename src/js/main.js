@@ -8,13 +8,19 @@
 		this.slidesLength = this.slides.length;
 		this.slidesDir = data.dir;
 		this.current = 0;
+		this.bodyScrollTop = 0;
+
+		this.tmpl = {
+			main:   '#presentation-main_tmpl'
+		}
+
 
 		this._init();
 	}
 
 	$.extend(Presentation.prototype, {
 		_init: function(){
-			this.element.html(Presentation._render($('#presentation-main').html(), {
+			this.element.html(Presentation.render($(this.tmpl.main).html(), {
 				slide: this.slidesDir + this.slides[0],
 				slidesLength: this.slidesLength,
 				previousDisabled: 1
@@ -57,6 +63,14 @@
 				if ($this.val() == ''){
 					$this.val(self.current+1);
 				}
+			});
+
+
+			self.element.on('click', '.js-btn-link_fullscreen', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				self._openWindow();
 			});
 		},
 		_requestSlide: function(direction){
@@ -139,11 +153,59 @@
 			} 
 
 			return obj;
+		},
+		_openWindow: function(){
+			var self = this;
+
+			self.bodyScrollTop = Presentation.getBodyScrollTop();
+
+			$('body').css({'overflow':'hidden'});
+
+			self.element.addClass('fullscreen');
+
+			$(window).on('keydown.presentationWindow', function(e){
+				self._windowKeysHandler(e);
+			});
+
+		},
+		_closeWindow: function(){
+			var self = this;
+
+			$(window).off('.presentationWindow');
+
+			self.element.removeClass('fullscreen');
+
+			$('body').css({'overflow':'auto'}).scrollTop(self.bodyScrollTop);
+		},
+		_windowKeysHandler: function(e){
+			// esc - 27
+			// назад - 37
+			// вперед - 39
+
+			var self = this,
+				keyCode = e.keyCode,
+				keys = {
+					27: {method: '_closeWindow',  param: ''},
+					37: {method: '_requestSlide', param: -1},
+					39: {method: '_requestSlide', param: 1}
+				};
+
+			if (keys[keyCode]){
+				// console.log(keys[keyCode]['method']);
+				// console.log(keys[keyCode]['param']);
+				e.preventDefault();
+				e.stopPropagation();
+
+				self[keys[keyCode]['method']].call(self, keys[keyCode]['param']);
+			} else {
+				console.log('unknown key');
+			}
+			
 		}
 	});
 
 	$.extend(Presentation, {
-		_render: function(tmpl, data){
+		render: function(tmpl, data){
 			var html = tmpl,
 				value, 
 				reg,
@@ -169,6 +231,9 @@
 			}
 
 			return html;
+		},
+		getBodyScrollTop: function(){
+			return (document.body && document.body.scrollTop) || (document.documentElement && document.documentElement.scrollTop);
 		}
 	});
 
