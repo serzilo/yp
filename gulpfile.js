@@ -30,8 +30,7 @@ var path = {
         js:    'src/js/*.js',
         css:   'src/css/main.styl',
         img:   'src/img/**/*.*'
-    },
-    clean: './build'
+    }
 };
 
 var config = {
