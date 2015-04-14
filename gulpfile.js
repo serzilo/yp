@@ -20,16 +20,18 @@ var path = {
         img:  'build/img/'
     },
     src: {
-        html:   'src/html/*.html',
-        js:     'src/js/main.js',
-        css:    'src/css/main.styl',
-        img:    'src/img/**/*.*'
+        html:       'src/html/*.html',
+        js:         'src/js/main.js',
+        css:        'src/css/main.styl',
+        sprite:     'src/img/sprite/*.*',
+        static:     'src/img/static/*.*'
     },
     watch: {
-        html:  'src/html/*.html',
-        js:    'src/js/*.js',
-        css:   'src/css/main.styl',
-        img:   'src/img/**/*.*'
+        html:       'src/html/*.html',
+        js:         'src/js/*.js',
+        css:        'src/css/main.styl',
+        sprite:     'src/img/sprite/*.*',
+        static:     'src/img/static/*.*'
     }
 };
 
@@ -68,7 +70,7 @@ gulp.task('js:build', function () {
 });
 
 gulp.task('sprite:build', function () {
-	var spriteData = gulp.src(path.src.img).pipe(spritesmith({
+	var spriteData = gulp.src(path.src.sprite).pipe(spritesmith({
 		imgName: 'sprite.png',
 		cssName: 'sprite.css',
 		imgPath: '../img/sprite.png'
@@ -77,9 +79,15 @@ gulp.task('sprite:build', function () {
 	spriteData.css.pipe(cssmin()).pipe(gulp.dest(path.build.css));
 });
 
+gulp.task('static:build', function () {
+    gulp.src(path.src.static)
+        .pipe(gulp.dest(path.build.img));
+});    
+
 gulp.task('build', [
     'html:build',
     'sprite:build',
+    'static:build',
     'css:build',
     'js:build'
 ]);
@@ -91,8 +99,11 @@ gulp.task('watch', function(){
     watch([path.watch.css], function(event, cb) {
         gulp.start('css:build');
     });
-    watch([path.watch.img], function(event, cb) {
+    watch([path.watch.sprite], function(event, cb) {
         gulp.start('sprite:build');
+    });
+    watch([path.watch.static], function(event, cb) {
+        gulp.start('static:build');
     });
     watch([path.watch.js], function(event, cb) {
         gulp.start('js:build');

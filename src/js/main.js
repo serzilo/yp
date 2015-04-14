@@ -9,24 +9,28 @@
 		this.slidesDir = data.dir;
 		this.current = 0;
 		this.bodyScrollTop = 0;
+		this.loadedImages = {};
 
 		this.tmpl = {
 			main:   '#presentation-main_tmpl'
 		}
-
 
 		this._init();
 	}
 
 	$.extend(Presentation.prototype, {
 		_init: function(){
-			this.element.html(Presentation.render($(this.tmpl.main).html(), {
-				slide: this.slidesDir + this.slides[0],
-				slidesLength: this.slidesLength,
+			var self = this;
+
+			self.element.html(Presentation.render($(self.tmpl.main).html(), {
+				slide: self._setSrc(),
+				slidesLength: self.slidesLength,
 				previousDisabled: 1
 			}));
 
-			this._addListners();
+			self.loadedImages[self.current] = 1;
+
+			self._addListners();
 		},
 		_addListners: function(){
 			var self = this;
@@ -99,8 +103,49 @@
 				this._setControlsStatements();
 			}
 		},
+		_setSrc: function(){
+			var self = this,
+				src = self.slides[self.current];
+
+			if (self.slides[self.current].search('http://') == -1){
+				src = self.slidesDir + src;
+			}
+
+			return src;
+		},
 		_setSlide: function(){
-			this.element.find('.js-pres__slide').attr({'src': this.slidesDir + this.slides[this.current]});
+			var self = this,
+				preloader = self.element.find('.pres__preloader'),
+				src = self._setSrc();
+
+			preloader.addClass('hide');
+
+			if (self.loadedImages[self.current]){
+				setImageSrc(src);
+			} else {
+				console.log('start loading image ' + self.current);
+
+				var img = new Image(),
+					loaderDelay = setTimeout(function(){
+						preloader.removeClass('hide');
+					},500);
+
+				img.src = src;
+
+				img.onload = function(){
+					console.log('stop loading image ' + self.current);
+
+					clearTimeout(loaderDelay);
+
+					setImageSrc(src);
+					self.loadedImages[self.current] = 1;
+					preloader.addClass('hide');
+				}
+			}
+
+			function setImageSrc(src){
+				self.element.find('.js-pres__slide').attr({'src': src});
+			}
 		},
 		_setControlsStatements: function(){
 			var btnSlidePrev   = this.element.find('.js-request-slide_prev'),
