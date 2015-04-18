@@ -300,9 +300,47 @@
 		});
 	}
 
+	// tooltips dirty
+	var tooltips = {
+		_init: function(){
+			$('[data-tooltip]').mouseenter(function(e){
+				var self = $(this),
+					selfWidth = self.outerWidth(),
+					tText = self.data('tooltip'),
+					offset = self.offset(),
+					tClassName = 'tooltip',
+					selfOffsetX = offset.left,
+					selfOffsetY = offset.top,
+					tHtml = $('<div class="' + tClassName + '">' + tText + '</div>'),
+					tWidth = 0,
+					tHeight = 0,
+					tOffsetX = 0,
+					tOffsetY = 0;
+
+				$('body').prepend(tHtml);
+
+				tWidth = tHtml.outerWidth();
+				tHeight = tHtml.outerHeight();
+
+				tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
+				tOffsetY = selfOffsetY - tHeight - 10;
+
+				tHtml.css({'left' : tOffsetX + 'px', 'top' : tOffsetY + 'px', 'opacity' : 1});
+
+				self.mouseleave(function(){
+					tHtml.remove();
+				});
+
+
+			});
+		}
+	};
+
+
 
 	$(function(){
 		$('#presentation1, #presentation2, #presentation3').presentation(PRESENTATIONS_DATA);
+		tooltips._init();
 	})
 
 }(jQuery));
