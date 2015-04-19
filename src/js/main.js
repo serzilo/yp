@@ -16,6 +16,7 @@
 		}
 
 		this._init();
+		tooltips.init();
 	}
 
 	$.extend(Presentation.prototype, {
@@ -302,37 +303,47 @@
 
 	// tooltips dirty
 	var tooltips = {
-		_init: function(){
-			$('[data-tooltip]').mouseenter(function(e){
-				var self = $(this),
-					selfWidth = self.outerWidth(),
-					tText = self.data('tooltip'),
-					offset = self.offset(),
-					tClassName = 'tooltip',
-					selfOffsetX = offset.left,
-					selfOffsetY = offset.top,
-					tHtml = $('<div class="' + tClassName + '">' + tText + '</div>'),
-					tWidth = 0,
-					tHeight = 0,
-					tOffsetX = 0,
-					tOffsetY = 0;
+		elements: '[data-tooltip]',
+		inited: false,
+		init: function(){
+			if (tooltips.inited === false){
+				var $body = $('body');
 
-				$('body').prepend(tHtml);
+				$body.on('mouseenter.tooltips', tooltips.elements, function(e){
+					var self = $(this),
+						selfWidth = self.outerWidth(),
+						tText = self.data('tooltip'),
+						offset = self.offset(),
+						tClassName = 'tooltip',
+						selfOffsetX = offset.left,
+						selfOffsetY = offset.top,
+						tHtml = $('<div class="' + tClassName + '">' + tText + '</div>'),
+						tWidth = 0,
+						tHeight = 0,
+						tOffsetX = 0,
+						tOffsetY = 0;
 
-				tWidth = tHtml.outerWidth();
-				tHeight = tHtml.outerHeight();
+					$body.prepend(tHtml);
 
-				tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
-				tOffsetY = selfOffsetY - tHeight - 10;
+					tWidth = tHtml.outerWidth();
+					tHeight = tHtml.outerHeight();
 
-				tHtml.css({'left' : tOffsetX + 'px', 'top' : tOffsetY + 'px', 'opacity' : 1});
+					tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
+					tOffsetY = selfOffsetY - tHeight - 15;
 
-				self.mouseleave(function(){
-					tHtml.remove();
+					tHtml.css({'left' : tOffsetX + 'px', 'top' : tOffsetY + 'px'}).addClass(tClassName + '_show');
+
+					self.one('mouseleave.tooltips', function(){
+						tHtml.remove();
+					});
 				});
 
-
-			});
+				tooltips.inited = true;
+			}
+		},
+		destroy: function(){
+			$('body').off('.tooltips');
+			tooltips.inited = false;
 		}
 	};
 
@@ -340,7 +351,6 @@
 
 	$(function(){
 		$('#presentation1, #presentation2, #presentation3').presentation(PRESENTATIONS_DATA);
-		tooltips._init();
 	})
 
 }(jQuery));

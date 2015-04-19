@@ -45,7 +45,7 @@ border-radius(){
 
 transitions(){
 	if arguments {
-		transition: arguments;
+		transition: unquote(join(', ', arguments));
 	} else {
 		transition: all 0.5s ease;
 	}
@@ -309,10 +309,14 @@ body {
 	color: #fff;
 	background: #2a2a2a;
 	padding: 5px 11px;
+	max-width: 150px;
+	text-align: center;
 	font-size: (13/16) * 100%;
 	line-height: (18/13) * 100%;
-	z-index: 10000;
+	z-index: 100000;
 	opacity: 0;
+	transform: translate3d(0, -10px, 0);
+	transitions(opacity 0.5s ease, transform 0.4s ease)
 
 	&:after{
 		absolute-element(100%, auto, auto, 50%)
@@ -323,5 +327,10 @@ body {
 		width: 0;
 		border: 10px solid transparent;
   		border-top-color: #2a2a2a;
+	}
+
+	&_show{
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
 	}
 }
