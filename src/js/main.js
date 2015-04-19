@@ -301,7 +301,6 @@
 		});
 	}
 
-	// tooltips dirty
 	var tooltips = {
 		elements: '[data-tooltip]',
 		inited: false,
@@ -311,35 +310,40 @@
 
 				$body.on('mouseenter.tooltips', tooltips.elements, function(e){
 					var self = $(this),
-						selfWidth = self.outerWidth(),
-						tText = self.data('tooltip'),
-						offset = self.offset(),
 						tClassName = 'tooltip',
-						selfOffsetX = offset.left,
-						selfOffsetY = offset.top,
-						tHtml = $('<div class="' + tClassName + '">' + tText + '</div>'),
-						tWidth = 0,
-						tHeight = 0,
-						tOffsetX = 0,
-						tOffsetY = 0;
+						tText = self.data('tooltip'),
+						tHtml = $('<div class="' + tClassName + '">' + tText + '</div>');
 
 					$body.prepend(tHtml);
 
-					tWidth = tHtml.outerWidth();
-					tHeight = tHtml.outerHeight();
+					tHtml.css(tooltips._positionTooltip(self, tHtml)).addClass(tClassName + '_show');
 
-					tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
-					tOffsetY = selfOffsetY - tHeight - 15;
-
-					tHtml.css({'left' : tOffsetX + 'px', 'top' : tOffsetY + 'px'}).addClass(tClassName + '_show');
-
-					self.one('mouseleave.tooltips', function(){
+					self.one('mousedown.tooltips mouseleave.tooltips', function(){
 						tHtml.remove();
+						self.off('.tooltips');
 					});
 				});
 
 				tooltips.inited = true;
 			}
+		},
+		_positionTooltip: function(self, tHtml){
+			var selfWidth = self.outerWidth(),
+				offset = self.offset(),
+				selfOffsetX = offset.left,
+				selfOffsetY = offset.top,
+				tWidth = 0,
+				tHeight = 0,
+				tOffsetX = 0,
+				tOffsetY = 0;
+
+			tWidth = tHtml.outerWidth();
+			tHeight = tHtml.outerHeight();
+
+			tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
+			tOffsetY = selfOffsetY - tHeight - 15;
+
+			return {'left': tOffsetX + 'px', 'top': tOffsetY + 'px'};
 		},
 		destroy: function(){
 			$('body').off('.tooltips');
