@@ -312,11 +312,18 @@
 					var self = $(this),
 						tClassName = 'tooltip',
 						tText = self.data('tooltip'),
-						tHtml = $('<div class="' + tClassName + '">' + tText + '</div>');
+						tHtml = $('<div class="' + tClassName + '">' + tText + '</div>'),
+						tooltipSettings;
 
 					$body.prepend(tHtml);
 
-					tHtml.css(tooltips._positionTooltip(self, tHtml)).addClass(tClassName + '_show');
+					tooltipSettings = tooltips._positionTooltip(self, tHtml, tClassName);
+
+					tHtml.css(tooltipSettings.css).addClass(tooltipSettings.classes);
+
+					setTimeout(function(){
+						tHtml.addClass(tClassName + '_show');
+					}, 0);
 
 					self.one('mousedown.tooltips mouseleave.tooltips', function(){
 						tHtml.remove();
@@ -327,23 +334,39 @@
 				tooltips.inited = true;
 			}
 		},
-		_positionTooltip: function(self, tHtml){
+		_positionTooltip: function(self, tHtml, tClassName){
 			var selfWidth = self.outerWidth(),
+				selfHeight = self.outerHeight(),
 				offset = self.offset(),
 				selfOffsetX = offset.left,
 				selfOffsetY = offset.top,
 				tWidth = 0,
 				tHeight = 0,
 				tOffsetX = 0,
-				tOffsetY = 0;
+				tOffsetY = 0,
+				$document = $(document),
+				documentHeight = $document.height(),
+				documentWidth  = $document.width(),
+				classes;
 
-			tWidth = tHtml.outerWidth();
+			tWidth  = tHtml.outerWidth();
 			tHeight = tHtml.outerHeight();
 
-			tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
-			tOffsetY = selfOffsetY - tHeight - 15;
+			// сверху
+			if ( (selfOffsetX + (tWidth / 2) ) <  documentWidth - 20){
+				tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
+				tOffsetY = selfOffsetY - tHeight - 15;
 
-			return {'left': tOffsetX + 'px', 'top': tOffsetY + 'px'};
+				classes = tClassName + '_top';
+			// сбоку
+			} else {
+				tOffsetX = selfOffsetX - tWidth - 15;
+				tOffsetY = selfOffsetY -(tHeight / 2) + (selfHeight / 2);
+
+				classes = tClassName + '_left';
+			}
+
+			return {'css': {'left': parseInt(tOffsetX) + 'px', 'top': parseInt(tOffsetY) + 'px'}, 'classes': classes};
 		},
 		destroy: function(){
 			$('body').off('.tooltips');
