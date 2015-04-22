@@ -8,5 +8,5 @@ var PRESENTATIONS_DATA = [{
 },
 {
 	dir: 'slides/3/',
-	slides: ['http://pgdv.ru/assets/images/blog/kit.jpg','1.jpg']
+	slides: ['1.jpg']
 }];

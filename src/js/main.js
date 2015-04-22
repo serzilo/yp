@@ -21,13 +21,18 @@
 
 	$.extend(Presentation.prototype, {
 		_init: function(){
-			var self = this;
+			var self = this,
+				templateData = {
+					slide: self._setSrc(),
+					slidesLength: self.slidesLength,
+					previousDisabled: 1
+				};
 
-			self.element.html(Presentation.render($(self.tmpl.main).html(), {
-				slide: self._setSrc(),
-				slidesLength: self.slidesLength,
-				previousDisabled: 1
-			}));
+			if (self.slidesLength < 2){
+				templateData.nextDisabled = 1;
+			}
+
+			self.element.html(Presentation.render($(self.tmpl.main).html(), templateData));
 
 			self.loadedImages[self.current] = 1;
 
@@ -248,8 +253,6 @@
 				};
 
 			if (keys[keyCode]){
-				// console.log(keys[keyCode]['method']);
-				// console.log(keys[keyCode]['param']);
 				e.preventDefault();
 				e.stopPropagation();
 
@@ -265,7 +268,7 @@
 		render: function(tmpl, data){
 			var html = tmpl,
 				value, 
-				reg,
+				reg1,
 				reg2;
 
 			if (data){
@@ -274,18 +277,20 @@
 						value = data[key];
 
 						// add varibales
-						reg = new RegExp("{{ " + key + " }}", "g");
-						html = html.replace(reg, value);
+						reg1 = new RegExp("{{ " + key + " }}", "g");
 
 						// if
-						reg2 = new RegExp("{if " + key +"}([\s\w\d_-]+){/if}", "gim");
-						html = html.replace(reg2, '');
-						//html = html.replace(/\{if previousDisabled\}([\s\w\d_-]+)\{\/if\}/gim, '\1')
+						reg2 = new RegExp('\{if ' + key + '\}(.*?)\{/if\}', 'gim');
+
+						html = html.replace(reg1, value).replace(reg2, '$1');
 					}
 				}
-			} else {
-				html = html.replace(/\{+(.*?)\}+/g, "");
-			}
+			} 
+
+			reg1 = new RegExp("{{ (.*?)}}", "g");
+			reg2 = new RegExp('\{if (.*?)\}(.*?)\{/if\}', 'gim');
+
+			html = html.replace(reg1, '').replace(reg2, '');
 
 			return html;
 		},

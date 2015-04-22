@@ -28,7 +28,7 @@
 	    			</div>
 	    		</a>
 	    
-	    		<a href="#" class="pres__nav pres__nav_next js-request-slide js-pres__nav_next" data-direction="1">
+	    		<a href="#" class="pres__nav {if nextDisabled}pres__nav_disabled{/if} pres__nav_next js-request-slide js-pres__nav_next" data-direction="1">
 	    			<div class="pres__nav-btn">
 	    				<div class="icon-next"></div>
 	    			</div>
@@ -38,16 +38,16 @@
 	    
 	    		<div class="toolbar">
 	    			<div class="toolbar__pagination">
-	    				<a href="#" class="btn-link js-request-slide js-request-slide_prev" data-direction="start" data-tooltip="В начало">
+	    				<a href="#" class="btn-link {if previousDisabled}btn-link_disabled{/if} js-request-slide js-request-slide_prev" data-direction="start" data-tooltip="В начало">
 	    					<div class="icon-backward"></div>
 	    				</a>
-	    				<a href="#" class="btn-link js-request-slide js-request-slide_prev" data-direction="-1" data-tooltip="Назад">
+	    				<a href="#" class="btn-link {if previousDisabled}btn-link_disabled{/if} js-request-slide js-request-slide_prev" data-direction="-1" data-tooltip="Назад">
 	    					<div class="icon-go-prev"></div>
 	    				</a>
-	    				<a href="#" class="btn-link js-request-slide js-request-slide_next" data-direction="1" data-tooltip="Вперёд">
+	    				<a href="#" class="btn-link {if nextDisabled}btn-link_disabled{/if} js-request-slide js-request-slide_next" data-direction="1" data-tooltip="Вперёд">
 	    					<div class="icon-go-next"></div>
 	    				</a>
-	    				<a href="#" class="btn-link js-request-slide js-request-slide_next" data-direction="finish" data-tooltip="В конец">
+	    				<a href="#" class="btn-link {if nextDisabled}btn-link_disabled{/if} js-request-slide js-request-slide_next" data-direction="finish" data-tooltip="В конец">
 	    					<div class="icon-forward"></div>
 	    				</a>
 	    			</div>
