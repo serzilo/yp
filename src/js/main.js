@@ -15,6 +15,10 @@
 			main:   '#presentation-main_tmpl'
 		}
 
+		this.icons = {
+			no_file: 'img/no_file.png'
+		}
+
 		this._init();
 		tooltips.init();
 	}
@@ -132,8 +136,11 @@
 				console.log('start loading image ' + self.current);
 
 				var img = new Image(),
+					loadingError = false;
 					loaderDelay = setTimeout(function(){
-						preloader.removeClass('hide');
+						if (loadingError === false){
+							preloader.removeClass('hide');
+						}
 					},500);
 
 				img.src = src;
@@ -145,6 +152,14 @@
 
 					setImageSrc(src);
 					self.loadedImages[self.current] = 1;
+					preloader.addClass('hide');
+				}
+
+				img.onerror = function(){
+					console.log('error in loading image ' + self.current);
+					loadingError = true;
+					
+					setImageSrc(self.icons.no_file);
 					preloader.addClass('hide');
 				}
 			}

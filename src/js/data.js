@@ -4,7 +4,7 @@ var PRESENTATIONS_DATA = [{
 },
 {
 	dir: 'slides/2/',
-	slides: ['1.jpg', '2.jpg']
+	slides: ['1.jpg', 'bag.jpg', '2.jpg']
 },
 {
 	dir: 'slides/3/',
