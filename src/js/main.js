@@ -358,17 +358,26 @@
 			tHeight = tHtml.outerHeight();
 
 			// сверху
-			if ( (selfOffsetX + (tWidth / 2) ) <  documentWidth - 20){
+			if (( (selfOffsetX + (tWidth / 2) ) <  documentWidth - 20) && ( (selfOffsetX - (tWidth / 2)) > 20 )){
 				tOffsetX = selfOffsetX - (tWidth / 2) + (selfWidth / 2);
 				tOffsetY = selfOffsetY - tHeight - 15;
 
 				classes = tClassName + '_top';
 			// сбоку
 			} else {
-				tOffsetX = selfOffsetX - tWidth - 15;
+				// слева от эклемента
+				tOffsetX = selfOffsetX - tWidth - 10;
+				classes = tClassName + '_left';
+
+				if (tOffsetX < 10){
+					//  справа от элемента
+					tOffsetX = selfOffsetX + selfWidth + 10;
+					classes = tClassName + '_right';
+				}
+
 				tOffsetY = selfOffsetY -(tHeight / 2) + (selfHeight / 2);
 
-				classes = tClassName + '_left';
+				
 			}
 
 			return {'css': {'left': parseInt(tOffsetX) + 'px', 'top': parseInt(tOffsetY) + 'px'}, 'classes': classes};

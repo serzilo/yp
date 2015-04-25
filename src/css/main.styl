@@ -179,6 +179,21 @@ body {
 		max-width: 100%;
 		absolute-element(0, 0, 0, 0)
 	}
+
+	& .pres__wrap-slide{
+		bottom: 0;
+	}
+
+	& .toolbar,
+	& .btn-link_close{
+		opacity: 0;
+		transitions(opacity 0.4s ease)
+	}
+
+	&:hover .toolbar,
+	&:hover .btn-link_close{
+		opacity: 1;
+	}
 }
 
 .toolbar{
@@ -344,6 +359,17 @@ body {
 			absolute-element(50%, auto, auto, 100%)
 			margin-top: -5px;
 			border-left-color: #2a2a2a;
+		}
+	}
+
+	&_right{
+		transform: translate3d(10px, 0, 0);
+
+		&:after{
+			border: 5px solid transparent;
+			absolute-element(50%, 100%, auto, auto)
+			margin-top: -5px;
+			border-right-color: #2a2a2a;
 		}
 	}
 
