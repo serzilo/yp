@@ -90,8 +90,6 @@ body {
 		display: block; 
 	}
 
-	
-
 	&__nav{
 		absolute-top-bottom(0, $toolbar-height)
 		width: 25%;
@@ -134,7 +132,7 @@ body {
 			background: #000;
 			background: rgba(0, 0, 0, 0.5);
 			opacity: 0;
-			transitions(opacity 0.4s ease-out)
+			transitions('opacity 0.3s ease-out')
 
 			& > .icon-next,
 			& > .icon-prev{
@@ -187,7 +185,7 @@ body {
 	& .toolbar,
 	& .btn-link_close{
 		opacity: 0;
-		transitions(opacity 0.4s ease)
+		transitions('opacity 0.4s ease')
 	}
 
 	&:hover .toolbar,
