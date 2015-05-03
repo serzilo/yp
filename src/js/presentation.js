@@ -229,7 +229,7 @@
 
 			self.bodyScrollTop = Presentation.getBodyScrollTop();
 
-			$('body').css({'overflow':'hidden'});
+			$('body').css({'overflow':'hidden'}).scrollTop(0);
 
 			self.element.addClass('fullscreen');
 
