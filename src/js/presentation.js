@@ -92,22 +92,23 @@
 			});
 		},
 		_requestSlide: function(direction){
-			var changeSlide = false;
+			var self = this,
+				changeSlide = false;
 
 			if (direction === 'start'){
-				this.current = 0;
+				self.current = 0;
 				changeSlide = true;
 			} else if (direction === 'finish'){
-				this.current = this.slidesLength - 1;
+				self.current = self.slidesLength - 1;
 				changeSlide = true;
-			} else if (this.slides[this.current+direction]){
-				this.current += direction;
+			} else if (self.slides[self.current+direction]){
+				self.current += direction;
 				changeSlide = true;
 			}
 
 			if (changeSlide === true){
-				this._setSlide();
-				this._setControlsStatements();
+				self._setSlide();
+				self._setControlsStatements();
 			}
 		},
 		_setSrc: function(){
@@ -166,16 +167,17 @@
 			}
 		},
 		_setControlsStatements: function(){
-			var btnSlidePrev   = this.element.find('.js-request-slide_prev'),
-				btnSlideNext   = this.element.find('.js-request-slide_next'),
-				presNavPrev    = this.element.find('.js-pres__nav_prev'),
-				presNavNext    = this.element.find('.js-pres__nav_next');
+			var self = this,
+				btnSlidePrev   = self.element.find('.js-request-slide_prev'),
+				btnSlideNext   = self.element.find('.js-request-slide_next'),
+				presNavPrev    = self.element.find('.js-pres__nav_prev'),
+				presNavNext    = self.element.find('.js-pres__nav_next');
 
 			// поле для ввода номера страницы
-			this.element.find('.js-input-text_num').val(this.current + 1);
+			self.element.find('.js-input-text_num').val(self.current + 1);
 
 			// проверка, можно ли листать вперед
-			if (this.slides[this.current + 1]){
+			if (self.slides[self.current + 1]){
 				btnSlideNext.removeClass('btn-link_disabled');
 				presNavNext.removeClass('pres__nav_disabled');
 			} else {
@@ -184,7 +186,7 @@
 			}
 
 			// проверка, можно ли листать назад
-			if (this.slides[this.current - 1]){
+			if (self.slides[self.current - 1]){
 				btnSlidePrev.removeClass('btn-link_disabled');
 				presNavPrev.removeClass('pres__nav_disabled');
 			} else {
@@ -205,19 +207,20 @@
 		},
 		_validateKeys: function(e) {
 			var keyCode = e.keyCode,
-				obj = {};
+				obj = {
+					allow: false
+				},
+				keyCodes = {
+					numberStart: 48,
+					numberEnd: 57,
+					erase: 8,
+					enter: 13
+				};
 
-			obj.allow = false;
-
-			// console.log(keyCode);
-
-			// цифры (48-57)
-			// стереть - 8
-			// enter - 13
-			if ((keyCode >= 48 && keyCode <= 57) || keyCode == 8 || keyCode == 13){
+			if ((keyCode >= keyCodes.numberStart && keyCode <= keyCodes.numberEnd) || keyCode == keyCodes.erase || keyCode == keyCodes.enter){
 				obj.allow = true;
 
-				if (keyCode == 13){
+				if (keyCode == keyCodes.enter){
 					obj.type = 'enter';
 				}
 			} 
